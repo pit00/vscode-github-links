@@ -1,4 +1,4 @@
-# Github Shortcuts
+# GitHub Shortcuts
 
 ## Open GitHub Repository URL
 
