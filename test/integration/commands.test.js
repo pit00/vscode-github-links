@@ -29,7 +29,7 @@ suite('Extension Commands', function () {
     _main.setTestEnvironment(false)
   })
 
-  test('extension.gitShort should copy current branch URL to clipboard', async function () {
+  test('gitShort.url should copy current branch URL to clipboard', async function () {
     const pathSeparator = '\\'
     const projectDirectory = 'F:\\my\\workspace\\foo'
     const vsCodeMock = getVsCodeMock({
@@ -51,7 +51,7 @@ suite('Extension Commands', function () {
       _main.getgitShort = async () => 'https://github.com/foo/bar-baz/blob/test-branch/subdir1/subdir2/myFileName.txt#L5'
 
       // Execute the actual command - this should now work without clipboard errors
-      await vscode.commands.executeCommand('extension.gitShort')
+      await vscode.commands.executeCommand('gitShort.url')
 
       // If we get here without errors, the test passed
       assert.ok(true, 'Command executed successfully')
@@ -61,7 +61,7 @@ suite('Extension Commands', function () {
     }
   })
 
-  test('extension.gitShortPerma should copy commit-specific URL to clipboard', async function () {
+  test('gitShort.perma should copy commit-specific URL to clipboard', async function () {
     const pathSeparator = '\\'
     const projectDirectory = 'T:\\lorem'
     const vsCodeMock = getVsCodeMock({
@@ -88,7 +88,7 @@ suite('Extension Commands', function () {
       _main.getgitShort = async () => 'https://github.com/foo/bar-baz/blob/75bf4eea9aa1a7fd6505d0d0aa43105feafa92ef/ipsum.md#L1-L2'
 
       // Execute the actual command - this should now work without clipboard errors
-      await vscode.commands.executeCommand('extension.gitShortPerma')
+      await vscode.commands.executeCommand('gitShort.perma')
 
       // If we get here without errors, the test passed
       assert.ok(true, 'Command executed successfully')
@@ -98,7 +98,7 @@ suite('Extension Commands', function () {
     }
   })
 
-  test('extension.gitShortDefault should copy default branch URL to clipboard', async function () {
+  test('gitShort.default should copy default branch URL to clipboard', async function () {
     const pathSeparator = '\\'
     const projectDirectory = 'T:\\lorem'
     const vsCodeMock = getVsCodeMock({
@@ -125,7 +125,7 @@ suite('Extension Commands', function () {
       _main.getgitShort = async () => 'https://github.com/foo/bar-baz/blob/main/ipsum.md#L1-L2'
 
       // Execute the actual command - this should now work without clipboard errors
-      await vscode.commands.executeCommand('extension.gitShortDefault')
+      await vscode.commands.executeCommand('gitShort.default')
 
       // If we get here without errors, the test passed
       assert.ok(true, 'Command executed successfully')
@@ -148,7 +148,7 @@ suite('Extension Commands', function () {
   })
 
   // Skip this test for now as it's having issues with stubbing
-  test.skip('extension.gitShort should work with tabGroups API for non-text files', async function () {
+  test.skip('gitShort.url should work with tabGroups API for non-text files', async function () {
     // This test is skipped because of issues with stubbing VS Code's API properties
     // The functionality is tested in the unit tests instead
   })

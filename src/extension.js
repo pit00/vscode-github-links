@@ -148,6 +148,12 @@ function activate (context) {
         }
 
         if (url) {
+          
+          if(config.repo){
+            let textt = await vscode.env.clipboard.readText()
+            console.log("CommandService#executeCommandDEV ❯", [textt]);
+            await vscode.env.openExternal(vscode.Uri.parse(url));
+          }
           await vscode.env.clipboard.writeText(url)
 
           try {
@@ -161,7 +167,7 @@ function activate (context) {
             console.error('Error sending telemetry event:', e)
           }
 
-          vscode.window.showInformationMessage('GitHub URL copied to clipboard!')
+          vscode.window.showInformationMessage('URL copied to clipboard 📎')
         }
       } catch (e) {
         handleError(e)
@@ -170,12 +176,14 @@ function activate (context) {
   }
 
   // Register commands defined in package.json
-  const disposable = vscode.commands.registerCommand('extension.gitShort', generateCommandBody({}))
-  const permaDisposable = vscode.commands.registerCommand('extension.gitShortPerma', generateCommandBody({ perma: true }))
-  const defaultDisposable = vscode.commands.registerCommand('extension.gitShortDefault', generateCommandBody({ default: true }))
+  const disposable = vscode.commands.registerCommand('gitShort.url', generateCommandBody({}))
+  const openDisposable = vscode.commands.registerCommand('gitShort.open', generateCommandBody({ open: true }))
+  const repoDisposable = vscode.commands.registerCommand('gitShort.repo', generateCommandBody({ repo: true }))
+  const permaDisposable = vscode.commands.registerCommand('gitShort.perma', generateCommandBody({ perma: true }))
+  const defaultDisposable = vscode.commands.registerCommand('gitShort.default', generateCommandBody({ default: true }))
 
   // Diagnostic command to help debug non-text file handling
-  const debugDisposable = vscode.commands.registerCommand('extension.gitShortDebug', async () => {
+  const debugDisposable = vscode.commands.registerCommand('gitShort.debug', async () => {
     try {
       const info = {
         activeTextEditor: !!vscode.window.activeTextEditor,
@@ -213,6 +221,8 @@ function activate (context) {
 
   // Add to a list of disposables which are disposed when this extension is deactivated.
   context.subscriptions.push(disposable)
+  context.subscriptions.push(openDisposable)
+  context.subscriptions.push(repoDisposable)
   context.subscriptions.push(permaDisposable)
   context.subscriptions.push(defaultDisposable)
   context.subscriptions.push(debugDisposable)

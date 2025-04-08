@@ -1,6 +1,6 @@
 {
     "name": "github-shortcuts",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "publisher": "pit00",
     "displayName": "GitHub Shortcuts",
     "description": "Open or copy GitHub URL files or repository",
@@ -22,19 +22,27 @@
     "contributes": {
         "commands": [
             {
-                "command": "extension.gitShort",
+                "command": "gitShort.url",
                 "title": "Copy GitHub URL"
             },
             {
-                "command": "extension.gitShortPerma",
+                "command": "gitShort.open",
+                "title": "Open GitHub URL"
+            },
+            {
+                "command": "gitShort.repo",
+                "title": "Open GitHub URL Repo"
+            },
+            {
+                "command": "gitShort.perma",
                 "title": "Copy GitHub URL (Permalink)"
             },
             {
-                "command": "extension.gitShortDefault",
+                "command": "gitShort.default",
                 "title": "Copy GitHub URL (Main)"
             },
             {
-                "command": "extension.gitShortDebug",
+                "command": "gitShort.debug",
                 "title": "Debug Copy GitHub URL (Non-text files)"
             }
         ],
