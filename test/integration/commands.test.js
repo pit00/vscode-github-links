@@ -21,7 +21,7 @@ suite('Extension Commands', function () {
     _main.setTestEnvironment(true)
 
     // Set up common mocks for commands
-    commandMocks.gitShortStub = sandbox.stub(_main, 'getgitShort')
+    commandMocks.gitShortStub = sandbox.stub(_main, 'getGitShort')
   })
 
   teardown(() => {
@@ -44,11 +44,11 @@ suite('Extension Commands', function () {
     // Stub the active editor
     sandbox.stub(vscode.window, 'activeTextEditor').value(vsCodeMock.window.activeTextEditor)
 
-    // Instead of stubbing clipboard, stub getgitShort directly
-    const origGetgitShort = _main.getgitShort
+    // Instead of stubbing clipboard, stub getGitShort directly
+    const origGetGitShort = _main.getGitShort
     try {
-      // Mock getgitShort with a simpler implementation for testing
-      _main.getgitShort = async () => 'https://github.com/foo/bar-baz/blob/test-branch/subdir1/subdir2/myFileName.txt#L5'
+      // Mock getGitShort with a simpler implementation for testing
+      _main.getGitShort = async () => 'https://github.com/foo/bar-baz/blob/test-branch/subdir1/subdir2/myFileName.txt#L5'
 
       // Execute the actual command - this should now work without clipboard errors
       await vscode.commands.executeCommand('gitShort.url')
@@ -57,7 +57,7 @@ suite('Extension Commands', function () {
       assert.ok(true, 'Command executed successfully')
     } finally {
       // Always restore the original function
-      _main.getgitShort = origGetgitShort
+      _main.getGitShort = origGetGitShort
     }
   })
 
@@ -81,11 +81,11 @@ suite('Extension Commands', function () {
     // Stub the active editor
     sandbox.stub(vscode.window, 'activeTextEditor').value(vsCodeMock.window.activeTextEditor)
 
-    // Instead of stubbing clipboard, stub getgitShort directly
-    const origGetgitShort = _main.getgitShort
+    // Instead of stubbing clipboard, stub getGitShort directly
+    const origGetGitShort = _main.getGitShort
     try {
-      // Mock getgitShort with a simpler implementation for testing
-      _main.getgitShort = async () => 'https://github.com/foo/bar-baz/blob/75bf4eea9aa1a7fd6505d0d0aa43105feafa92ef/ipsum.md#L1-L2'
+      // Mock getGitShort with a simpler implementation for testing
+      _main.getGitShort = async () => 'https://github.com/foo/bar-baz/blob/75bf4eea9aa1a7fd6505d0d0aa43105feafa92ef/ipsum.md#L1-L2'
 
       // Execute the actual command - this should now work without clipboard errors
       await vscode.commands.executeCommand('gitShort.perma')
@@ -94,7 +94,7 @@ suite('Extension Commands', function () {
       assert.ok(true, 'Command executed successfully')
     } finally {
       // Always restore the original function
-      _main.getgitShort = origGetgitShort
+      _main.getGitShort = origGetGitShort
     }
   })
 
@@ -118,11 +118,11 @@ suite('Extension Commands', function () {
     // Stub the active editor
     sandbox.stub(vscode.window, 'activeTextEditor').value(vsCodeMock.window.activeTextEditor)
 
-    // Instead of stubbing clipboard, stub getgitShort directly
-    const origGetgitShort = _main.getgitShort
+    // Instead of stubbing clipboard, stub getGitShort directly
+    const origGetGitShort = _main.getGitShort
     try {
-      // Mock getgitShort with a simpler implementation for testing
-      _main.getgitShort = async () => 'https://github.com/foo/bar-baz/blob/main/ipsum.md#L1-L2'
+      // Mock getGitShort with a simpler implementation for testing
+      _main.getGitShort = async () => 'https://github.com/foo/bar-baz/blob/main/ipsum.md#L1-L2'
 
       // Execute the actual command - this should now work without clipboard errors
       await vscode.commands.executeCommand('gitShort.default')
@@ -131,7 +131,7 @@ suite('Extension Commands', function () {
       assert.ok(true, 'Command executed successfully')
     } finally {
       // Always restore the original function
-      _main.getgitShort = origGetgitShort
+      _main.getGitShort = origGetGitShort
     }
   })
 

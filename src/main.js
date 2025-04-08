@@ -23,7 +23,7 @@ function setTestEnvironment (isTest) {
  * @param {vscode.Uri} [fileUri] - URI of the file when no editor is active
  * @returns {Promise<string|null>} Returns an URL or `null` if could not be determined.
  */
-async function getgitShort (editor, type = {}, fileUri = null) {
+async function getGitShort (editor, type = {}, fileUri = null) {
   try {
     // Check for Git extension first
     const gitExtension = vscode.extensions.getExtension('vscode.git')
@@ -58,7 +58,7 @@ async function getgitShort (editor, type = {}, fileUri = null) {
     relativePath = module.exports.normalizePathForGitHub(relativePath)
 
     // Uses repository to find the remote fetchUrl and then uses gitShortFromGit to generate the URL
-    const gitShort = await getgitShortFromRemotes(repository)
+    const gitShort = await getGitShortFromRemotes(repository)
 
     // Uses repository to get location of .git/config, checks for main or master
     // Fallback: uses repository to get root path, and runs git branch -r to get the branch name via origin/HEAD
@@ -181,7 +181,7 @@ async function getDefaultBranch (repository) {
  * @param {Object} repository - The repository object to search for a GitHub URL.
  * @returns {Promise<string>} The GitHub URL.
  */
-async function getgitShortFromRemotes (repository) {
+async function getGitShortFromRemotes (repository) {
   const config = vscode.workspace.getConfiguration('gitShort')
   // Check domainOverride first, fall back to gitUrl for backwards compatibility
   const domainOverride = config.get('domainOverride') || config.get('gitUrl')
@@ -411,8 +411,8 @@ function safeExecuteCommand (commandId, ...args) {
 
 module.exports = {
   getDefaultBranch,
-  getgitShort,
-  getgitShortFromRemotes,
+  getGitShort,
+  getGitShortFromRemotes,
   getRepository,
   normalizePathForGitHub,
   setTestEnvironment,

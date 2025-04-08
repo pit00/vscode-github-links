@@ -26,7 +26,7 @@ suite('URL Generation', function () {
     _main.setTestEnvironment(false)
   })
 
-  test('getgitShort should generate correct URL for Windows file paths', async function () {
+  test('getGitShort should generate correct URL for Windows file paths', async function () {
     const pathSeparator = '\\'
     const projectDirectory = 'F:\\my\\workspace\\foo'
     const vsCodeMock = getVsCodeMock({
@@ -38,14 +38,14 @@ suite('URL Generation', function () {
     stubWorkspace(sandbox, _main, projectDirectory, pathSeparator)
     stubGitExtension(sandbox, { projectDirectory })
 
-    const url = await _main.getgitShort(vsCodeMock.window.activeTextEditor)
+    const url = await _main.getGitShort(vsCodeMock.window.activeTextEditor)
     assert.strictEqual(
       url,
       'https://github.com/foo/bar-baz/blob/test-branch/subdir1/subdir2/myFileName.txt#L5'
     )
   })
 
-  test('getgitShort should handle Unix-style file paths', async function () {
+  test('getGitShort should handle Unix-style file paths', async function () {
     const projectDirectory = '/home/user/workspace/foo'
     const vsCodeMock = getVsCodeMock({
       startLine: 4,
@@ -55,14 +55,14 @@ suite('URL Generation', function () {
     stubWorkspace(sandbox, _main, projectDirectory)
     stubGitExtension(sandbox, { projectDirectory })
 
-    const url = await _main.getgitShort(vsCodeMock.window.activeTextEditor)
+    const url = await _main.getGitShort(vsCodeMock.window.activeTextEditor)
     assert.strictEqual(
       url,
       'https://github.com/foo/bar-baz/blob/test-branch/subdir1/subdir2/myFileName.txt#L5'
     )
   })
 
-  test('getgitShort - windows path file directly in project dir', async function () {
+  test('getGitShort - windows path file directly in project dir', async function () {
     const pathSeparator = '\\'
     const projectDirectory = 'T:\\foo'
     const vsCodeMock = getVsCodeMock({
@@ -74,11 +74,11 @@ suite('URL Generation', function () {
     stubWorkspace(sandbox, _main, projectDirectory, pathSeparator)
     stubGitExtension(sandbox, { projectDirectory })
 
-    const url = await _main.getgitShort(vsCodeMock.window.activeTextEditor)
+    const url = await _main.getGitShort(vsCodeMock.window.activeTextEditor)
     assert.strictEqual(url, 'https://github.com/foo/bar-baz/blob/test-branch/bar.md#L103', 'Invalid URL returned')
   })
 
-  test('getgitShort should generate URL with current branch for single line selection', async function () {
+  test('getGitShort should generate URL with current branch for single line selection', async function () {
     const pathSeparator = '\\'
     const projectDirectory = 'T:\\lorem'
     const vsCodeMock = getVsCodeMock({
@@ -91,11 +91,11 @@ suite('URL Generation', function () {
     stubWorkspace(sandbox, _main, projectDirectory, pathSeparator)
     stubGitExtension(sandbox, { projectDirectory })
 
-    const url = await _main.getgitShort(vsCodeMock.window.activeTextEditor)
+    const url = await _main.getGitShort(vsCodeMock.window.activeTextEditor)
     assert.strictEqual(url, 'https://github.com/foo/bar-baz/blob/test-branch/ipsum.md#L1-L2', 'Invalid URL returned')
   })
 
-  test('getgitShort should handle multi-line selections', async function () {
+  test('getGitShort should handle multi-line selections', async function () {
     const pathSeparator = '\\'
     const projectDirectory = 'T:\\foo'
     const vsCodeMock = getVsCodeMock({
@@ -108,11 +108,11 @@ suite('URL Generation', function () {
     stubWorkspace(sandbox, _main, projectDirectory, pathSeparator)
     stubGitExtension(sandbox, { projectDirectory })
 
-    const url = await _main.getgitShort(vsCodeMock.window.activeTextEditor)
+    const url = await _main.getGitShort(vsCodeMock.window.activeTextEditor)
     assert.strictEqual(url, 'https://github.com/foo/bar-baz/blob/test-branch/bar.md#L31-L41', 'Invalid URL returned')
   })
 
-  test('getgitShort should generate commit-specific URLs', async function () {
+  test('getGitShort should generate commit-specific URLs', async function () {
     const pathSeparator = '\\'
     const projectDirectory = 'T:\\lorem'
     const vsCodeMock = getVsCodeMock({
@@ -128,11 +128,11 @@ suite('URL Generation', function () {
       projectDirectory
     })
 
-    const url = await _main.getgitShort(vsCodeMock.window.activeTextEditor, { perma: true })
+    const url = await _main.getGitShort(vsCodeMock.window.activeTextEditor, { perma: true })
     assert.strictEqual(url, 'https://github.com/foo/bar-baz/blob/75bf4eea9aa1a7fd6505d0d0aa43105feafa92ef/ipsum.md#L1-L2', 'Invalid URL returned')
   })
 
-  test('getgitShort should generate URL for default branch', async function () {
+  test('getGitShort should generate URL for default branch', async function () {
     const pathSeparator = '\\'
     const projectDirectory = 'T:\\lorem'
     const vsCodeMock = getVsCodeMock({
@@ -146,11 +146,11 @@ suite('URL Generation', function () {
     stubWorkspace(sandbox, _main, projectDirectory, pathSeparator)
     stubGitExtension(sandbox, { projectDirectory })
 
-    const url = await _main.getgitShort(vsCodeMock.window.activeTextEditor, { default: true })
+    const url = await _main.getGitShort(vsCodeMock.window.activeTextEditor, { default: true })
     assert.strictEqual(url, 'https://github.com/foo/bar-baz/blob/main/ipsum.md#L1-L2', 'Invalid URL returned')
   })
 
-  test('getgitShort - same active.line as end.line', async function () {
+  test('getGitShort - same active.line as end.line', async function () {
     const pathSeparator = '\\'
     const projectDirectory = 'F:\\my\\workspace\\foo'
     const vsCodeMock = getVsCodeMock({
@@ -167,11 +167,11 @@ suite('URL Generation', function () {
       repoUrl: 'https://github.com/foo/bar-baz.git'
     })
 
-    const url = await _main.getgitShort(vsCodeMock.window.activeTextEditor)
+    const url = await _main.getGitShort(vsCodeMock.window.activeTextEditor)
     assert.strictEqual(url, 'https://github.com/foo/bar-baz/blob/test-branch/subdir1/subdir2/myFileName.txt#L5')
   })
 
-  test('getgitShort - permalink for a file that contains symbols with / path separator', async function () {
+  test('getGitShort - permalink for a file that contains symbols with / path separator', async function () {
     const projectDirectory = '/foo'
     const vsCodeMock = getVsCodeMock({
       startLine: 0,
@@ -185,11 +185,11 @@ suite('URL Generation', function () {
       projectDirectory
     })
 
-    const url = await _main.getgitShort(vsCodeMock.window.activeTextEditor, { perma: true })
+    const url = await _main.getGitShort(vsCodeMock.window.activeTextEditor, { perma: true })
     assert.strictEqual(url, 'https://github.com/foo/bar-baz/blob/75bf4eea9aa1a7fd6505d0d0aa43105feafa92ef/a%20!%22%23$%25&\'()*+,-.:;%3C=%3E%3F@%5B%5C%5D%5E%60%7B%7C%7D~.md#L1-L2', 'Invalid URL returned')
   })
 
-  test('getgitShort - permalink for a file that contains symbols with \\ path separator', async function () {
+  test('getGitShort - permalink for a file that contains symbols with \\ path separator', async function () {
     const pathSeparator = '\\'
     const projectDirectory = 'T:\\foo'
     const vsCodeMock = getVsCodeMock({
@@ -205,11 +205,11 @@ suite('URL Generation', function () {
       projectDirectory
     })
 
-    const url = await _main.getgitShort(vsCodeMock.window.activeTextEditor, { perma: true })
+    const url = await _main.getGitShort(vsCodeMock.window.activeTextEditor, { perma: true })
     assert.strictEqual(url, 'https://github.com/foo/bar-baz/blob/75bf4eea9aa1a7fd6505d0d0aa43105feafa92ef/a%20!%22%23$%25&\'()*+,-.:;%3C=%3E%3F@%5B/%5D%5E%60%7B%7C%7D~.md#L1-L2', 'Invalid URL returned')
   })
 
-  test('getgitShort should handle workspace with multiple folders', async function () {
+  test('getGitShort should handle workspace with multiple folders', async function () {
     const projectDirectory = '/Users/mattlott/GitHub/workspace1/folder2'
     const vsCodeMock = getVsCodeMock({
       startLine: 10,
@@ -223,11 +223,11 @@ suite('URL Generation', function () {
     stubWorkspace(sandbox, _main, projectDirectory)
     stubGitExtension(sandbox, { projectDirectory })
 
-    const url = await _main.getgitShort(vsCodeMock.window.activeTextEditor)
+    const url = await _main.getGitShort(vsCodeMock.window.activeTextEditor)
     assert.strictEqual(url, 'https://github.com/foo/bar-baz/blob/test-branch/src/main.js#L11')
   })
 
-  test('getgitShortFromRemotes should parse remote URL correctly', async function () {
+  test('getGitShortFromRemotes should parse remote URL correctly', async function () {
     const repository = {
       state: {
         HEAD: { name: 'main' },
@@ -235,7 +235,7 @@ suite('URL Generation', function () {
         remotes: [{ name: 'origin', fetchUrl: 'https://github.com/user/repo.git' }]
       }
     }
-    const url = await _main.getgitShortFromRemotes(repository)
+    const url = await _main.getGitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://github.com/user/repo')
   })
 })
