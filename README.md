@@ -75,4 +75,4 @@ Note: The keyboard shortcuts may sometimes not work for non-text files depending
 
 1. **Keyboard shortcuts for non-text files**: While we've improved support for keyboard shortcuts with non-text files, they may not work in all VS Code configurations. Using the Explorer context menu is the most reliable method.
 
-2. **Git repository detection**: For files outside the current workspace's Git repository, you may need to configure the `copyGithubUrl.rootGitFolder` setting to point to the correct Git repository location.
+2. **Git repository detection**: For files outside the current workspace's Git repository, you may need to configure the `gitShort.rootGitFolder` setting to point to the correct Git repository location.

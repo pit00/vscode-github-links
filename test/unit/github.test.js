@@ -39,7 +39,7 @@ suite('GitHub Integration', function () {
     assert.strictEqual(repository.state.remotes[0].fetchUrl, 'https://github.com/user/repo.git')
   })
 
-  test('getGithubUrl should handle missing git extension', async function () {
+  test('getgitShort should handle missing git extension', async function () {
     const vsCodeMock = getVsCodeMock({
       projectDirectory: '/test/path'
     })
@@ -47,14 +47,14 @@ suite('GitHub Integration', function () {
     sandbox.stub(vscode.extensions, 'getExtension').returns(null)
 
     try {
-      await _main.getGithubUrl(vsCodeMock.window.activeTextEditor)
+      await _main.getgitShort(vsCodeMock.window.activeTextEditor)
       assert.fail('Should have thrown an error')
     } catch (error) {
       assert(error.message.includes('Git extension not found'))
     }
   })
 
-  test('getGithubUrl should handle missing repository remotes', async function () {
+  test('getgitShort should handle missing repository remotes', async function () {
     this.timeout(10000)
     const clock = sandbox.useFakeTimers({
       shouldAdvanceTime: true,
@@ -83,7 +83,7 @@ suite('GitHub Integration', function () {
       }
     })
 
-    const urlPromise = _main.getGithubUrl(vsCodeMock.window.activeTextEditor)
+    const urlPromise = _main.getgitShort(vsCodeMock.window.activeTextEditor)
 
     await clock.tickAsync(500 * 10)
 
@@ -97,7 +97,7 @@ suite('GitHub Integration', function () {
     }
   })
 
-  test('getGithubUrlFromRemotes should handle SSH URLs', async function () {
+  test('getgitShortFromRemotes should handle SSH URLs', async function () {
     const repository = {
       state: {
         HEAD: { name: 'main' },
@@ -110,11 +110,11 @@ suite('GitHub Integration', function () {
       get: () => undefined
     })
 
-    const url = await _main.getGithubUrlFromRemotes(repository)
+    const url = await _main.getgitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://github.com/user/repo')
   })
 
-  test('getGithubUrlFromRemotes should handle git+https URLs', async function () {
+  test('getgitShortFromRemotes should handle git+https URLs', async function () {
     const repository = {
       state: {
         HEAD: { name: 'main' },
@@ -127,7 +127,7 @@ suite('GitHub Integration', function () {
       get: () => undefined
     })
 
-    const url = await _main.getGithubUrlFromRemotes(repository)
+    const url = await _main.getgitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://github.com/user/repo')
   })
 
@@ -276,13 +276,13 @@ origin/feature/123
       await branchPromise
       assert.fail('Should have thrown')
     } catch (error) {
-      assert(error.message.includes('Configure copyGithubUrl.defaultBranchFallback'))
+      assert(error.message.includes('Configure gitShort.defaultBranchFallback'))
     } finally {
       clock.restore()
     }
   })
 
-  test('getGithubUrlFromRemotes should handle enterprise GitHub URLs', async function () {
+  test('getgitShortFromRemotes should handle enterprise GitHub URLs', async function () {
     const repository = {
       state: {
         HEAD: { name: 'main' },
@@ -295,11 +295,11 @@ origin/feature/123
       get: (key) => key === 'gitUrl' ? 'github.enterprise.com' : undefined
     })
 
-    const url = await _main.getGithubUrlFromRemotes(repository)
+    const url = await _main.getgitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://github.enterprise.com/user/repo')
   })
 
-  test('getGithubUrlFromRemotes should handle enterprise URLs without config', async function () {
+  test('getgitShortFromRemotes should handle enterprise URLs without config', async function () {
     const repository = {
       state: {
         HEAD: { name: 'main' },
@@ -312,11 +312,11 @@ origin/feature/123
       get: () => undefined
     })
 
-    const url = await _main.getGithubUrlFromRemotes(repository)
+    const url = await _main.getgitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://github.enterprise.com/user/repo')
   })
 
-  test('getGithubUrlFromRemotes should handle arbitrary enterprise domains', async function () {
+  test('getgitShortFromRemotes should handle arbitrary enterprise domains', async function () {
     const repository = {
       state: {
         HEAD: { name: 'main' },
@@ -329,11 +329,11 @@ origin/feature/123
       get: (key) => key === 'gitUrl' ? 'git.company.com' : undefined
     })
 
-    const url = await _main.getGithubUrlFromRemotes(repository)
+    const url = await _main.getgitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://git.company.com/user/repo')
   })
 
-  test('getGithubUrlFromRemotes should handle multiple remotes', async function () {
+  test('getgitShortFromRemotes should handle multiple remotes', async function () {
     const repository = {
       state: {
         HEAD: { name: 'main' },
@@ -349,11 +349,11 @@ origin/feature/123
       get: (key) => key === 'gitUrl' ? 'git.internal.org' : undefined
     })
 
-    const url = await _main.getGithubUrlFromRemotes(repository)
+    const url = await _main.getgitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://git.internal.org/user/repo')
   })
 
-  test('getGithubUrlFromRemotes should handle all Git URL formats', async function () {
+  test('getgitShortFromRemotes should handle all Git URL formats', async function () {
     sandbox.stub(vscode.workspace, 'getConfiguration').returns({
       get: () => undefined
     })
@@ -424,12 +424,12 @@ origin/feature/123
         }
       }
 
-      const url = await _main.getGithubUrlFromRemotes(repository)
+      const url = await _main.getgitShortFromRemotes(repository)
       assert.strictEqual(url, expected, `Failed to handle URL format: ${input}`)
     }))
   })
 
-  test('getGithubUrlFromRemotes should use branch-specific remote first', async function () {
+  test('getgitShortFromRemotes should use branch-specific remote first', async function () {
     const repository = {
       state: {
         HEAD: { name: 'feature' },
@@ -445,11 +445,11 @@ origin/feature/123
       get: () => undefined
     })
 
-    const url = await _main.getGithubUrlFromRemotes(repository)
+    const url = await _main.getgitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://github.com/user2/repo')
   })
 
-  test('getGithubUrlFromRemotes should handle enterprise URLs with both gitUrl and domain', async function () {
+  test('getgitShortFromRemotes should handle enterprise URLs with both gitUrl and domain', async function () {
     const repository = {
       state: {
         HEAD: { name: 'main' },
@@ -464,11 +464,11 @@ origin/feature/123
       get: (key) => key === 'gitUrl' ? 'git.company.com' : undefined
     })
 
-    const url = await _main.getGithubUrlFromRemotes(repository)
+    const url = await _main.getgitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://git.company.com/user/repo')
   })
 
-  test('getGithubUrlFromRemotes should fallback to other remotes when branch remote not found', async function () {
+  test('getgitShortFromRemotes should fallback to other remotes when branch remote not found', async function () {
     const repository = {
       state: {
         HEAD: { name: 'feature' },
@@ -483,11 +483,11 @@ origin/feature/123
       get: () => undefined
     })
 
-    const url = await _main.getGithubUrlFromRemotes(repository)
+    const url = await _main.getgitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://github.com/user/repo')
   })
 
-  test('getGithubUrlFromRemotes should handle enterprise URLs without github in domain', async function () {
+  test('getgitShortFromRemotes should handle enterprise URLs without github in domain', async function () {
     const repository = {
       state: {
         HEAD: { name: 'main' },
@@ -500,7 +500,7 @@ origin/feature/123
       get: (key) => key === 'gitUrl' ? 'git.internal.acme.corp' : undefined
     })
 
-    const url = await _main.getGithubUrlFromRemotes(repository)
+    const url = await _main.getgitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://git.internal.acme.corp/user/repo')
   })
 
@@ -518,7 +518,7 @@ origin/feature/123
     // Mock the configuration
     sandbox.stub(vscode.workspace, 'getConfiguration').returns({
       get: (key) => {
-        if (key === 'copyGithubUrl.rootGitFolder') return gitPath
+        if (key === 'gitShort.rootGitFolder') return gitPath
         return undefined
       }
     })
@@ -550,7 +550,7 @@ origin/feature/123
     assert.strictEqual(result, repository)
   })
 
-  test('getGithubUrlFromRemotes should prioritize configured gitUrl', async function () {
+  test('getgitShortFromRemotes should prioritize configured gitUrl', async function () {
     const repository = {
       state: {
         HEAD: { name: 'main' },
@@ -566,11 +566,11 @@ origin/feature/123
       get: (key) => key === 'gitUrl' ? 'github.enterprise.com' : undefined
     })
 
-    const url = await _main.getGithubUrlFromRemotes(repository)
+    const url = await _main.getgitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://github.enterprise.com/user/repo')
   })
 
-  test('getGithubUrlFromRemotes should auto-detect enterprise domains', async function () {
+  test('getgitShortFromRemotes should auto-detect enterprise domains', async function () {
     const repository = {
       state: {
         HEAD: { name: 'main' },
@@ -587,7 +587,7 @@ origin/feature/123
       get: () => undefined
     })
 
-    const url = await _main.getGithubUrlFromRemotes(repository)
+    const url = await _main.getgitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://github.custom.internal/user/repo')
   })
 
@@ -677,7 +677,7 @@ origin/feature/123
     // Mock rootGitFolder configuration
     sandbox.stub(vscode.workspace, 'getConfiguration').returns({
       get: (key) => {
-        if (key === 'copyGithubUrl.rootGitFolder') return gitPath
+        if (key === 'gitShort.rootGitFolder') return gitPath
         return undefined
       }
     })
@@ -706,7 +706,7 @@ origin/feature/123
     assert.strictEqual(result, activeRepo, 'Should use repository containing active document instead of rootGitFolder')
   })
 
-  test('getGithubUrl should handle missing commit hash for permalink', async function () {
+  test('getgitShort should handle missing commit hash for permalink', async function () {
     const vsCodeMock = getVsCodeMock({
       projectDirectory: '/test/path'
     })
@@ -733,7 +733,7 @@ origin/feature/123
     })
 
     try {
-      await _main.getGithubUrl(vsCodeMock.window.activeTextEditor, { perma: true })
+      await _main.getgitShort(vsCodeMock.window.activeTextEditor, { perma: true })
       assert.fail('Should have thrown an error')
     } catch (error) {
       assert(error.message.includes('No commit hash found'))
@@ -790,7 +790,7 @@ origin/feature/123
     }
   })
 
-  test('getGithubUrlFromRemotes should use domainOverride over gitUrl', async function () {
+  test('getgitShortFromRemotes should use domainOverride over gitUrl', async function () {
     const repository = {
       state: {
         HEAD: { name: 'main' },
@@ -807,11 +807,11 @@ origin/feature/123
       }
     })
 
-    const url = await _main.getGithubUrlFromRemotes(repository)
+    const url = await _main.getgitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://github.com/user/repo')
   })
 
-  test('getGithubUrlFromRemotes should fallback to gitUrl when domainOverride not set', async function () {
+  test('getgitShortFromRemotes should fallback to gitUrl when domainOverride not set', async function () {
     const repository = {
       state: {
         HEAD: { name: 'main' },
@@ -828,7 +828,7 @@ origin/feature/123
       }
     })
 
-    const url = await _main.getGithubUrlFromRemotes(repository)
+    const url = await _main.getgitShortFromRemotes(repository)
     assert.strictEqual(url, 'https://github.com/user/repo')
   })
 

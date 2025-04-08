@@ -23,7 +23,7 @@ function getBaseTelemetryData () {
   }
 
   const relativePath = filePath ? filePath.split(path.sep).join('/') : 'unknown'
-  const configSettings = vscode.workspace.getConfiguration('copyGithubUrl')
+  const configSettings = vscode.workspace.getConfiguration('gitShort')
 
   // Determine if file is in workspace root
   let isWorkspaceRoot = false
@@ -128,10 +128,10 @@ function activate (context) {
 
         if (editor) {
           // Handle text files with line numbers
-          url = await main.getGithubUrl(editor, config)
+          url = await main.getgitShort(editor, config)
         } else if (fileUri) {
           // Handle non-text files without line numbers
-          url = await main.getGithubUrl(null, config, fileUri)
+          url = await main.getgitShort(null, config, fileUri)
         } else {
           // If no file found, log debug info and throw error
           const debugInfo = {
@@ -170,12 +170,12 @@ function activate (context) {
   }
 
   // Register commands defined in package.json
-  const disposable = vscode.commands.registerCommand('extension.gitHubUrl', generateCommandBody({}))
-  const permaDisposable = vscode.commands.registerCommand('extension.gitHubUrlPerma', generateCommandBody({ perma: true }))
-  const defaultDisposable = vscode.commands.registerCommand('extension.gitHubUrlDefault', generateCommandBody({ default: true }))
+  const disposable = vscode.commands.registerCommand('extension.gitShort', generateCommandBody({}))
+  const permaDisposable = vscode.commands.registerCommand('extension.gitShortPerma', generateCommandBody({ perma: true }))
+  const defaultDisposable = vscode.commands.registerCommand('extension.gitShortDefault', generateCommandBody({ default: true }))
 
   // Diagnostic command to help debug non-text file handling
-  const debugDisposable = vscode.commands.registerCommand('extension.gitHubUrlDebug', async () => {
+  const debugDisposable = vscode.commands.registerCommand('extension.gitShortDebug', async () => {
     try {
       const info = {
         activeTextEditor: !!vscode.window.activeTextEditor,

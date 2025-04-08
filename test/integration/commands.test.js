@@ -21,7 +21,7 @@ suite('Extension Commands', function () {
     _main.setTestEnvironment(true)
 
     // Set up common mocks for commands
-    commandMocks.githubUrlStub = sandbox.stub(_main, 'getGithubUrl')
+    commandMocks.gitShortStub = sandbox.stub(_main, 'getgitShort')
   })
 
   teardown(() => {
@@ -29,7 +29,7 @@ suite('Extension Commands', function () {
     _main.setTestEnvironment(false)
   })
 
-  test('extension.gitHubUrl should copy current branch URL to clipboard', async function () {
+  test('extension.gitShort should copy current branch URL to clipboard', async function () {
     const pathSeparator = '\\'
     const projectDirectory = 'F:\\my\\workspace\\foo'
     const vsCodeMock = getVsCodeMock({
@@ -44,24 +44,24 @@ suite('Extension Commands', function () {
     // Stub the active editor
     sandbox.stub(vscode.window, 'activeTextEditor').value(vsCodeMock.window.activeTextEditor)
 
-    // Instead of stubbing clipboard, stub getGithubUrl directly
-    const origGetGithubUrl = _main.getGithubUrl
+    // Instead of stubbing clipboard, stub getgitShort directly
+    const origGetgitShort = _main.getgitShort
     try {
-      // Mock getGithubUrl with a simpler implementation for testing
-      _main.getGithubUrl = async () => 'https://github.com/foo/bar-baz/blob/test-branch/subdir1/subdir2/myFileName.txt#L5'
+      // Mock getgitShort with a simpler implementation for testing
+      _main.getgitShort = async () => 'https://github.com/foo/bar-baz/blob/test-branch/subdir1/subdir2/myFileName.txt#L5'
 
       // Execute the actual command - this should now work without clipboard errors
-      await vscode.commands.executeCommand('extension.gitHubUrl')
+      await vscode.commands.executeCommand('extension.gitShort')
 
       // If we get here without errors, the test passed
       assert.ok(true, 'Command executed successfully')
     } finally {
       // Always restore the original function
-      _main.getGithubUrl = origGetGithubUrl
+      _main.getgitShort = origGetgitShort
     }
   })
 
-  test('extension.gitHubUrlPerma should copy commit-specific URL to clipboard', async function () {
+  test('extension.gitShortPerma should copy commit-specific URL to clipboard', async function () {
     const pathSeparator = '\\'
     const projectDirectory = 'T:\\lorem'
     const vsCodeMock = getVsCodeMock({
@@ -81,24 +81,24 @@ suite('Extension Commands', function () {
     // Stub the active editor
     sandbox.stub(vscode.window, 'activeTextEditor').value(vsCodeMock.window.activeTextEditor)
 
-    // Instead of stubbing clipboard, stub getGithubUrl directly
-    const origGetGithubUrl = _main.getGithubUrl
+    // Instead of stubbing clipboard, stub getgitShort directly
+    const origGetgitShort = _main.getgitShort
     try {
-      // Mock getGithubUrl with a simpler implementation for testing
-      _main.getGithubUrl = async () => 'https://github.com/foo/bar-baz/blob/75bf4eea9aa1a7fd6505d0d0aa43105feafa92ef/ipsum.md#L1-L2'
+      // Mock getgitShort with a simpler implementation for testing
+      _main.getgitShort = async () => 'https://github.com/foo/bar-baz/blob/75bf4eea9aa1a7fd6505d0d0aa43105feafa92ef/ipsum.md#L1-L2'
 
       // Execute the actual command - this should now work without clipboard errors
-      await vscode.commands.executeCommand('extension.gitHubUrlPerma')
+      await vscode.commands.executeCommand('extension.gitShortPerma')
 
       // If we get here without errors, the test passed
       assert.ok(true, 'Command executed successfully')
     } finally {
       // Always restore the original function
-      _main.getGithubUrl = origGetGithubUrl
+      _main.getgitShort = origGetgitShort
     }
   })
 
-  test('extension.gitHubUrlDefault should copy default branch URL to clipboard', async function () {
+  test('extension.gitShortDefault should copy default branch URL to clipboard', async function () {
     const pathSeparator = '\\'
     const projectDirectory = 'T:\\lorem'
     const vsCodeMock = getVsCodeMock({
@@ -118,20 +118,20 @@ suite('Extension Commands', function () {
     // Stub the active editor
     sandbox.stub(vscode.window, 'activeTextEditor').value(vsCodeMock.window.activeTextEditor)
 
-    // Instead of stubbing clipboard, stub getGithubUrl directly
-    const origGetGithubUrl = _main.getGithubUrl
+    // Instead of stubbing clipboard, stub getgitShort directly
+    const origGetgitShort = _main.getgitShort
     try {
-      // Mock getGithubUrl with a simpler implementation for testing
-      _main.getGithubUrl = async () => 'https://github.com/foo/bar-baz/blob/main/ipsum.md#L1-L2'
+      // Mock getgitShort with a simpler implementation for testing
+      _main.getgitShort = async () => 'https://github.com/foo/bar-baz/blob/main/ipsum.md#L1-L2'
 
       // Execute the actual command - this should now work without clipboard errors
-      await vscode.commands.executeCommand('extension.gitHubUrlDefault')
+      await vscode.commands.executeCommand('extension.gitShortDefault')
 
       // If we get here without errors, the test passed
       assert.ok(true, 'Command executed successfully')
     } finally {
       // Always restore the original function
-      _main.getGithubUrl = origGetGithubUrl
+      _main.getgitShort = origGetgitShort
     }
   })
 
@@ -148,7 +148,7 @@ suite('Extension Commands', function () {
   })
 
   // Skip this test for now as it's having issues with stubbing
-  test.skip('extension.gitHubUrl should work with tabGroups API for non-text files', async function () {
+  test.skip('extension.gitShort should work with tabGroups API for non-text files', async function () {
     // This test is skipped because of issues with stubbing VS Code's API properties
     // The functionality is tested in the unit tests instead
   })

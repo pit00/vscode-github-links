@@ -3,7 +3,7 @@
 const BRANCH_DISCOVERY_MAX_RETRIES = 3
 const BRANCH_DISCOVERY_RETRY_DELAY = 500
 
-const githubUrlFromGit = require('github-url-from-git')
+const gitShortFromGit = require('github-url-from-git')
 const path = require('path')
 const vscode = require('vscode')
 const fs = require('fs').promises
@@ -23,7 +23,7 @@ function setTestEnvironment (isTest) {
  * @param {vscode.Uri} [fileUri] - URI of the file when no editor is active
  * @returns {Promise<string|null>} Returns an URL or `null` if could not be determined.
  */
-async function getGithubUrl (editor, type = {}, fileUri = null) {
+async function getgitShort (editor, type = {}, fileUri = null) {
   try {
     // Check for Git extension first
     const gitExtension = vscode.extensions.getExtension('vscode.git')
@@ -57,8 +57,8 @@ async function getGithubUrl (editor, type = {}, fileUri = null) {
     let relativePath = path.relative(repository.rootUri.fsPath, uri.fsPath)
     relativePath = module.exports.normalizePathForGitHub(relativePath)
 
-    // Uses repository to find the remote fetchUrl and then uses githubUrlFromGit to generate the URL
-    const githubUrl = await getGithubUrlFromRemotes(repository)
+    // Uses repository to find the remote fetchUrl and then uses gitShortFromGit to generate the URL
+    const gitShort = await getgitShortFromRemotes(repository)
 
     // Uses repository to get location of .git/config, checks for main or master
     // Fallback: uses repository to get root path, and runs git branch -r to get the branch name via origin/HEAD
@@ -76,7 +76,7 @@ async function getGithubUrl (editor, type = {}, fileUri = null) {
         : repository.state.HEAD?.name || 'main'
     }
     const branch = await getBranch()
-    return `${githubUrl}/blob/${branch}/${relativePath}${lineRef}`
+    return `${gitShort}/blob/${branch}/${relativePath}${lineRef}`
   } catch (error) {
     if (!isTestEnvironment) console.error('Failed to get GitHub URL:', error)
     throw error
@@ -93,7 +93,7 @@ async function getGithubUrl (editor, type = {}, fileUri = null) {
 async function getDefaultBranch (repository) {
   try {
     // 1. Try user configuration
-    const extensionConfig = vscode.workspace.getConfiguration('copyGithubUrl')
+    const extensionConfig = vscode.workspace.getConfiguration('gitShort')
     const defaultBranchFallback = extensionConfig.get('defaultBranchFallback')
     if (defaultBranchFallback) return defaultBranchFallback
 
@@ -169,9 +169,9 @@ async function getDefaultBranch (repository) {
       if (!isTestEnvironment) console.error('Failed to run git branch -r:', error)
     }
 
-    throw new Error('Could not determine default branch. Configure copyGithubUrl.defaultBranchFallback in settings.')
+    throw new Error('Could not determine default branch. Configure gitShort.defaultBranchFallback in settings.')
   } catch (error) {
-    if (error.message.includes('Configure copyGithubUrl.defaultBranchFallback')) throw error
+    if (error.message.includes('Configure gitShort.defaultBranchFallback')) throw error
     throw new Error(`Failed to get default branch: ${error.message}`)
   }
 }
@@ -181,8 +181,8 @@ async function getDefaultBranch (repository) {
  * @param {Object} repository - The repository object to search for a GitHub URL.
  * @returns {Promise<string>} The GitHub URL.
  */
-async function getGithubUrlFromRemotes (repository) {
-  const config = vscode.workspace.getConfiguration('copyGithubUrl')
+async function getgitShortFromRemotes (repository) {
+  const config = vscode.workspace.getConfiguration('gitShort')
   // Check domainOverride first, fall back to gitUrl for backwards compatibility
   const domainOverride = config.get('domainOverride') || config.get('gitUrl')
 
@@ -225,7 +225,7 @@ async function getGithubUrlFromRemotes (repository) {
       if (remote) {
         // If gitUrl is configured, only use that as the base URL
         const extraBaseUrls = domainOverride ? [domainOverride] : [remote.fetchUrl.match(/(?:https?:\/\/|git@|ssh:\/\/(?:[^@]+@)?)([^:/]+)/)?.[1]].filter(Boolean)
-        return Promise.resolve(githubUrlFromGit(remote.fetchUrl, { extraBaseUrls }))
+        return Promise.resolve(gitShortFromGit(remote.fetchUrl, { extraBaseUrls }))
       }
     }
   }
@@ -234,7 +234,7 @@ async function getGithubUrlFromRemotes (repository) {
   if (domainOverride) {
     const enterpriseRemote = remotes.find(r => r.fetchUrl.toLowerCase().includes(domainOverride.toLowerCase()))
     if (enterpriseRemote) {
-      return Promise.resolve(githubUrlFromGit(enterpriseRemote.fetchUrl, { extraBaseUrls: [domainOverride] }))
+      return Promise.resolve(gitShortFromGit(enterpriseRemote.fetchUrl, { extraBaseUrls: [domainOverride] }))
     }
   }
 
@@ -247,7 +247,7 @@ async function getGithubUrlFromRemotes (repository) {
       const normalizedUrl = domainOverride
         ? remote.fetchUrl.replace(domain, domainOverride)
         : remote.fetchUrl
-      const url = githubUrlFromGit(normalizedUrl, { extraBaseUrls: [domain].filter(Boolean) })
+      const url = gitShortFromGit(normalizedUrl, { extraBaseUrls: [domain].filter(Boolean) })
       if (url) return Promise.resolve(url)
     } catch (error) {
       if (!isTestEnvironment) console.warn(`Failed to process remote ${remote.name}: ${error.message}`)
@@ -310,7 +310,7 @@ async function getRepository (git, editor, fileUri = null) {
   // If no repository found, try rootGitFolder configuration as fallback
   if (!repository) {
     try {
-      const config = vscode.workspace.getConfiguration('copyGithubUrl')
+      const config = vscode.workspace.getConfiguration('gitShort')
       const rootGitFolder = config.get('rootGitFolder')
 
       if (rootGitFolder && git.repositories && Array.isArray(git.repositories)) {
@@ -411,8 +411,8 @@ function safeExecuteCommand (commandId, ...args) {
 
 module.exports = {
   getDefaultBranch,
-  getGithubUrl,
-  getGithubUrlFromRemotes,
+  getgitShort,
+  getgitShortFromRemotes,
   getRepository,
   normalizePathForGitHub,
   setTestEnvironment,

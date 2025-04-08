@@ -24,7 +24,7 @@ suite('Non-Text File Support', function () {
     _main.setTestEnvironment(false)
   })
 
-  test('getGithubUrl should generate URL for non-text files without line numbers (png)', async function () {
+  test('getgitShort should generate URL for non-text files without line numbers (png)', async function () {
     const projectDirectory = '/home/user/workspace/foo'
     const vsCodeMock = getVsCodeMock({
       projectDirectory,
@@ -34,8 +34,8 @@ suite('Non-Text File Support', function () {
     stubWorkspace(sandbox, _main, projectDirectory)
     stubGitExtension(sandbox, { projectDirectory })
 
-    // Direct call to getGithubUrl with null editor and fileUri
-    const url = await _main.getGithubUrl(null, {}, vsCodeMock.window.activeEditorPane.input.uri)
+    // Direct call to getgitShort with null editor and fileUri
+    const url = await _main.getgitShort(null, {}, vsCodeMock.window.activeEditorPane.input.uri)
     assert.strictEqual(
       url,
       'https://github.com/foo/bar-baz/blob/test-branch/images/icon.png',
@@ -45,7 +45,7 @@ suite('Non-Text File Support', function () {
     assert.strictEqual(url.includes('#L'), false, 'URL should not contain line reference')
   })
 
-  test('getGithubUrl should generate permalink for non-text files (jpg)', async function () {
+  test('getgitShort should generate permalink for non-text files (jpg)', async function () {
     const projectDirectory = '/home/user/workspace/foo'
     const vsCodeMock = getVsCodeMock({
       projectDirectory,
@@ -59,7 +59,7 @@ suite('Non-Text File Support', function () {
     })
 
     // Use permalink option
-    const url = await _main.getGithubUrl(null, { perma: true }, vsCodeMock.window.activeEditorPane.input.uri)
+    const url = await _main.getgitShort(null, { perma: true }, vsCodeMock.window.activeEditorPane.input.uri)
     assert.strictEqual(
       url,
       'https://github.com/foo/bar-baz/blob/abcd1234567890/assets/background.jpg',
@@ -68,7 +68,7 @@ suite('Non-Text File Support', function () {
     assert.strictEqual(url.includes('#L'), false, 'URL should not contain line reference')
   })
 
-  test('getGithubUrl should generate default branch URL for non-text files (pdf)', async function () {
+  test('getgitShort should generate default branch URL for non-text files (pdf)', async function () {
     const projectDirectory = '/home/user/workspace/foo'
     const vsCodeMock = getVsCodeMock({
       projectDirectory,
@@ -80,7 +80,7 @@ suite('Non-Text File Support', function () {
     sandbox.stub(_main, 'getDefaultBranch').resolves('main')
 
     // Use default branch option
-    const url = await _main.getGithubUrl(null, { default: true }, vsCodeMock.window.activeEditorPane.input.uri)
+    const url = await _main.getgitShort(null, { default: true }, vsCodeMock.window.activeEditorPane.input.uri)
     assert.strictEqual(
       url,
       'https://github.com/foo/bar-baz/blob/main/docs/manual.pdf',
@@ -101,7 +101,7 @@ suite('Non-Text File Support', function () {
     stubGitExtension(sandbox, { projectDirectory })
 
     // Direct API call instead of command
-    const url = await _main.getGithubUrl(null, {}, vsCodeMock.window.activeEditorPane.input.uri)
+    const url = await _main.getgitShort(null, {}, vsCodeMock.window.activeEditorPane.input.uri)
 
     assert.strictEqual(
       url,
@@ -136,9 +136,9 @@ suite('Non-Text File Support', function () {
     assert.strictEqual(repository.state.remotes[0].fetchUrl, 'https://github.com/foo/bar-baz.git')
   })
 
-  test('getGithubUrl should throw error when no editor or fileUri is provided', async function () {
+  test('getgitShort should throw error when no editor or fileUri is provided', async function () {
     try {
-      await _main.getGithubUrl(null, {})
+      await _main.getgitShort(null, {})
       assert.fail('Should have thrown an error')
     } catch (error) {
       assert(error.message.includes('Neither editor nor fileUri provided'))
@@ -146,7 +146,7 @@ suite('Non-Text File Support', function () {
   })
 
   // New test for TabGroups API support
-  test('getGithubUrl should work with tabGroups API for non-text files (binary file)', async function () {
+  test('getgitShort should work with tabGroups API for non-text files (binary file)', async function () {
     const projectDirectory = '/home/user/workspace/foo'
     const vsCodeMock = getVsCodeMock({
       projectDirectory,
@@ -159,8 +159,8 @@ suite('Non-Text File Support', function () {
     // Explicitly set activeEditorPane to null to force using tabGroups API
     sandbox.stub(vsCodeMock.window, 'activeEditorPane').value(null)
 
-    // Call getGithubUrl using tabGroups API
-    const url = await _main.getGithubUrl(null, {}, vsCodeMock.window.tabGroups.activeTabGroup.activeTab.input.uri)
+    // Call getgitShort using tabGroups API
+    const url = await _main.getgitShort(null, {}, vsCodeMock.window.tabGroups.activeTabGroup.activeTab.input.uri)
 
     assert.strictEqual(
       url,
@@ -188,7 +188,7 @@ suite('Non-Text File Support', function () {
     // Without using any async operations that might time out
     let refs
     try {
-      // This mimics the code from main.js getGithubUrlFromRemotes
+      // This mimics the code from main.js getgitShortFromRemotes
       if (!repository.state.refs || !Array.isArray(repository.state.refs)) {
         refs = []
       } else {

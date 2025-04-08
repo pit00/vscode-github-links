@@ -1,20 +1,14 @@
 {
-    "name": "copy-github-url",
-    "version": "0.17.0",
-    "publisher": "mattlott",
-    "displayName": "Copy GitHub URL",
-    "description": "Copy GitHub URL for current location to clipboard.",
+    "name": "github-shortcuts",
+    "version": "0.1.0",
+    "publisher": "pit00",
+    "displayName": "GitHub Shortcuts",
+    "description": "Open or copy GitHub URL files or repository",
     "repository": {
         "type": "git",
-        "url": "https://github.com/differentmatt/vscode-copy-github-url"
+        "url": "https://github.com/pit00/vscode-github-links"
     },
-    "homepage": "https://github.com/differentmatt/vscode-copy-github-url/blob/main/README.md",
-    "bugs": "https://github.com/differentmatt/vscode-copy-github-url/issues",
     "icon": "images/icon.png",
-    "galleryBanner": {
-        "color": "#009933",
-        "theme": "dark"
-    },
     "engines": {
         "vscode": "^1.74.0",
         "node": ">=18.0.0"
@@ -28,75 +22,39 @@
     "contributes": {
         "commands": [
             {
-                "command": "extension.gitHubUrl",
+                "command": "extension.gitShort",
                 "title": "Copy GitHub URL"
             },
             {
-                "command": "extension.gitHubUrlPerma",
+                "command": "extension.gitShortPerma",
                 "title": "Copy GitHub URL (Permalink)"
             },
             {
-                "command": "extension.gitHubUrlDefault",
+                "command": "extension.gitShortDefault",
                 "title": "Copy GitHub URL (Main)"
             },
             {
-                "command": "extension.gitHubUrlDebug",
+                "command": "extension.gitShortDebug",
                 "title": "Debug Copy GitHub URL (Non-text files)"
             }
         ],
-        "keybindings": [
-            {
-                "command": "extension.gitHubUrl",
-                "key": "ctrl+l c",
-                "when": "editorFocus || activeEditorIsNotText || resourceScheme == 'file' || activeViewlet == 'workbench.view.explorer'"
-            },
-            {
-                "command": "extension.gitHubUrlPerma",
-                "key": "ctrl+shift+l c",
-                "when": "editorFocus || activeEditorIsNotText || resourceScheme == 'file' || activeViewlet == 'workbench.view.explorer'"
-            },
-            {
-                "command": "extension.gitHubUrlDefault",
-                "key": "ctrl+shift+l m",
-                "when": "editorFocus || activeEditorIsNotText || resourceScheme == 'file' || activeViewlet == 'workbench.view.explorer'"
-            }
-        ],
-        "menus": {
-            "explorer/context": [
-                {
-                    "command": "extension.gitHubUrl",
-                    "group": "7_modification",
-                    "when": "resourceScheme == 'file'"
-                },
-                {
-                    "command": "extension.gitHubUrlPerma",
-                    "group": "7_modification",
-                    "when": "resourceScheme == 'file'"
-                },
-                {
-                    "command": "extension.gitHubUrlDefault",
-                    "group": "7_modification",
-                    "when": "resourceScheme == 'file'"
-                }
-            ]
-        },
         "configuration": {
             "title": "Copy github url configuration",
             "properties": {
-                "copyGithubUrl.defaultBranchFallback": {
+                "gitShort.defaultBranchFallback": {
                     "type": "string",
                     "description": "Default branch name to use if it cannot be determined dynamically"
                 },
-                "copyGithubUrl.domainOverride": {
+                "gitShort.domainOverride": {
                     "type": "string",
                     "description": "GitHub domain override, for scenarios like enterprise instances or SSH aliases. E.g. github.example.com"
                 },
-                "copyGithubUrl.gitUrl": {
+                "gitShort.gitUrl": {
                     "type": "string",
                     "description": "Deprecated: Use domainOverride instead. GitHub domain override, for scenarios like enterprise instances or SSH aliases.",
-                    "deprecationMessage": "This setting is deprecated. Please use copyGithubUrl.domainOverride instead."
+                    "deprecationMessage": "This setting is deprecated. Please use gitShort.domainOverride instead."
                 },
-                "copyGithubUrl.rootGitFolder": {
+                "gitShort.rootGitFolder": {
                     "type": "string",
                     "description": "Provides the relative path to the folder that contains the .git folder for the current opened workspace or folder in multi folder workspace"
                 }
