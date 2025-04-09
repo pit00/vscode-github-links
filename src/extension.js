@@ -149,6 +149,7 @@ function activate (context) {
 
                 if (url) {
                     if(config.copy){
+                        url = url.replace(/[^#]+$/g,"") // remove #lines
                         await vscode.env.clipboard.writeText(url)
                         vscode.window.showInformationMessage('File URL copied to clipboard 📎')
                     }
@@ -161,7 +162,6 @@ function activate (context) {
                         vscode.window.showInformationMessage('File (master) URL copied to clipboard 📎')
                     }
                     if(config.open){
-                        url = url.replace(/[^#]+$/g,"") // remove #lines
                         await vscode.env.openExternal(vscode.Uri.parse(url));
                     }
                     if(config.repo){
