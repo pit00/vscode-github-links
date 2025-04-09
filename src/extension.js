@@ -149,7 +149,8 @@ function activate (context) {
 
                 if (url) {
                     if(config.copy){
-                        url = url.replace(/[^#]+$/g,"") // remove #lines
+                        // url = url.replace(/[^#]+$/g,"")
+                        url = url.replace(/#.*$/g,"") // remove #lines
                         await vscode.env.clipboard.writeText(url)
                         vscode.window.showInformationMessage('File URL copied to clipboard 📎')
                     }
