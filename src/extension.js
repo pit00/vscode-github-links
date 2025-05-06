@@ -169,6 +169,10 @@ function activate (context) {
                         url = url.replace(/\/blob.+$/g,"") // remove file paths url
                         await vscode.env.openExternal(vscode.Uri.parse(url));
                     }
+                    if(config.branches){
+                        url = url.replace(/\/blob.+$/g,"") // remove file paths url
+                        await vscode.env.openExternal(vscode.Uri.parse(url + "/branches"));
+                    }
                     // try {
                     //     const telemetryData = {
                     //         urlType: config.perma ? 'permalink' : (config.default ? 'default' : 'current'),
@@ -190,6 +194,7 @@ function activate (context) {
     const disposable = vscode.commands.registerCommand('gitShort.url', generateCommandBody({ copy: true }))
     const openDisposable = vscode.commands.registerCommand('gitShort.open', generateCommandBody({ open: true }))
     const repoDisposable = vscode.commands.registerCommand('gitShort.repo', generateCommandBody({ repo: true }))
+    const branchesDisposable = vscode.commands.registerCommand('gitShort.branches', generateCommandBody({ branches: true }))
     const permaDisposable = vscode.commands.registerCommand('gitShort.perma', generateCommandBody({ perma: true }))
     const defaultDisposable = vscode.commands.registerCommand('gitShort.default', generateCommandBody({ default: true }))
 
@@ -238,6 +243,7 @@ function activate (context) {
     context.subscriptions.push(disposable)
     context.subscriptions.push(openDisposable)
     context.subscriptions.push(repoDisposable)
+    context.subscriptions.push(branchesDisposable)
     context.subscriptions.push(permaDisposable)
     context.subscriptions.push(defaultDisposable)
     context.subscriptions.push(debugDisposable)

@@ -1,6 +1,6 @@
 {
     "name": "github-shortcuts",
-    "version": "0.1.6",
+    "version": "0.2.0",
     "publisher": "pit00",
     "displayName": "GitHub Shortcuts",
     "description": "Open or copy GitHub URL files or repository",
@@ -32,6 +32,10 @@
             {
                 "command": "gitShort.repo",
                 "title": "GitShort: Open GitHub URL Repo"
+            },
+            {
+                "command": "gitShort.branches",
+                "title": "GitShort: Open GitHub URL Repo Branches"
             },
             {
                 "command": "gitShort.perma",
